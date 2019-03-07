@@ -14,7 +14,7 @@ in_path()
     oldIFS=$IFS
     IFS=":"
 
-    for directory in "$ourpath"
+    for directory in $ourpath
     do
       if [ -x $directory/$cmd ] ; then
         result=0   # if we are here, we found the command
@@ -40,3 +40,19 @@ checkForCmdInPath()
     fi
   fi
 }
+
+
+if [ $# -ne 1 ] ; then
+  echo "Usage: $0 command" >&2
+  exit 1
+fi
+
+
+checkForCmdInPath "$1"
+case $? in
+  0 ) echo "$1 found in PATH"                   ;;
+  1 ) echo "$1 not found or not executable"     ;;
+  2 ) echo "$1 not found in PATH"               ;;
+esac
+
+exit 0
