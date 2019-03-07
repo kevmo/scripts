@@ -3,7 +3,7 @@ sick af shell scripts
 
 ### Vocabulary:
 * subshell, shebang, executable, portability, one-liner
-* POSIX standard
+* POSIX standard (portable OS interface) for UNIX
 
 
 Good blogs
