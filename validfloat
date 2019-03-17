@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# validfloat - Tests whether a number is a valid floating-point
+#  value. Doesn't accept scientific notations
+
+. validint
+
+validfloat()
+{
+  fvalue="$1"
+
+  # check for decimal point
+  if [ ! -z $(echo $fvalue | sed 's/[^.]//g') ] ; then
+
+    # extract pre-decimal
+    decimalPart="$(echo $fvalue | cut -d. -f1)"
+
+    # extract the digits after the decimal point
+    fractionalPart="${value#*\.}"
+
+    # decimalPart testing
+    if [ ! -z $decimalPart ] ; then
+      if ! validint "$decimalPart" "" "" ; then
+        return 1
+      fi
+    fi
+
+    # fractionalPart testing
+    if [ "${fractionalPart%${fractionalPart#?}}" = "-" ] ; then
+      echo "Invalid floating point number" >&2
+      return 1
+    fi
+
+    if [ "$fractionalPart" != "" ] ; then
+      if  ! validint "$fractionalPart" "0" "" ; then
+        return 1
+      fi
+    fi
+
+  else
+    if [ "$fvalue" = "-" ] ; then
+      echo "Invalid floating-point format" >&2
+      return 1
+    fi
+
+    if ! validint  "$fvalue" "" "" ; then
+      return 1
+    fi
+  fi
+
+  return 0
+}
+
+
+
+#### TESTING
+
+if validfloat $1 ; then
+  echo "$1 is a valid floating-point value"
+fi
+
+exit 0
